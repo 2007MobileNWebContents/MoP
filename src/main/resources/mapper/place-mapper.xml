@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="PlaceMapper">
+	<resultMap type="Review" id="reviewResultMap">
+		<result property="vCreateDate" column="V_CREATE_DATE"></result>
+		<result property="vModifyDate" column="V_MODIFY_DATE"></result>
+		<result property="vStatus" column="V_STATUS"></result>
+	</resultMap>
+	<resultMap type="RvReply" id="rvReplyResultMap">
+		<result property="reId" column="RE_ID"></result>
+		<result property="reContent" column="RE_CONTENT"></result>
+		<result property="refBid" column="REF_BID"></result>
+		<result property="reWriter" column="RE_WRITER"></result>
+		<result property="reCreateDate" column="RE_CREATE_DATE"></result>
+	</resultMap>
+<!-- plae 전체 list 출력  -->
+<select id="selectList" resultType="Place">
+	<!-- <![CDATA[SELECT * FROM(SELECT * FROM (SELECT ROWNUM AS PID, PCODE, PIMG, PNAME, PADDRESS, PRICE, PMAX, PTEL, PDETAIL FROM 
+(SELECT * FROM PLACE ORDER BY PID DESC)) WHERE PID >= 6) WHERE ROWNUM <= 5]]>  -->
+SELECT * FROM PLACE
+</select>
+
+<select id="selectCtgList" resultType="Place">
+	SELECT * FROM PLACE 
+	WHERE PCODE LIKE #{pCode} 
+</select>
+
+<!--  상세 페이지  pId 값 전달받음 -->
+<select id="selectOne" resultType="Place">
+	SELECT * FROM PLACE WHERE PID = #{pId}
+</select>
+
+<select id="selectReviewList" resultMap="reviewResultMap">
+	SELECT * FROM REVIEW WHERE VNO=#{vNo}
+</select>
+</mapper>

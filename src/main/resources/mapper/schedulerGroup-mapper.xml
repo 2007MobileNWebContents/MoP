@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace = "SchedulerGroupMapper">
+	<resultMap type="SchedulerGroup" id="schedulerGroupResultMap">
+	<result property="start" column="GSTARTDATE"/>
+	<result property="end" column="GENDDATE"/>
+	<result property="title" column="GTITLE"/>
+	<result property="description" column="GDESCRIPTION"/>
+	<result property="type" column="GTYPE"/>
+	<result property="username" column="GUSERNAME"/>
+	<result property="backgroundColor" column="GBACKGROUNDCOLOR"/>
+	<result property="textColor" column="GTEXTCOLOR"/>
+	<result property="allDay" column="GALLDAY"/>
+	
+	
+	</resultMap>
+
+
+<select id="schedulerGroupList" resultMap = "schedulerGroupResultMap">
+	
+	SELECT * FROM SCHEDULER_GROUP
+	ORDER BY GSTARTDATE ASC
+
+</select>
+
+<insert id="insertSchedulerGroup">
+	INSERT INTO SCHEDULER_GROUP
+  VALUES(SEQ_GID.NEXTVAL,#{title},#{description},#{start},#{end},#{type},#{username},#{schedulerGroup},#{backgroundColor},#{textColor},#{allDay})
+
+</insert>
+<delete id="deleteSchedulerGroup" >
+  	DELETE FROM SCHEDULER_GROUP
+  	WHERE GID = #{gId}
+  	
+  </delete>
+  <update id="updateSchedulerGroup">
+  	UPDATE SCHEDULER_GROUP
+  	SET GTITLE = #{title}, GDESCRIPTION = #{description}, GSTARTDATE = #{start}, GENDDATE = #{end}, GTYPE = #{type}, SCHEDULERGROUP = #{schedulerGroup}, GBACKGROUNDCOLOR = #{backgroundColor}
+  	WHERE GID = #{gId}
+  
+  </update>
+</mapper>

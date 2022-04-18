@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="FaQBoardMapper">
+	<resultMap type="FaqBoard" id="faqBoardResultMap">
+	<result property ="faqId" column="FAQID"/>
+	<result property ="faqTitle" column="FAQTITLE"/>
+	<result property ="faqContent" column="FAQCONTENT"/>
+	<result property="faqWriter" column="FAQWRITER"/>
+	<result property ="faqWriteDate" column="FAQWRITEDATE"/>
+	</resultMap>
+	<insert id="insertFaQBoard">
+	INSERT INTO FAQBOARD
+	VALUES(SEQ_FAQID.NEXTVAL,#{faqTitle},#{faqContent},#{faqWriter},SYSDATE)
+	</insert>
+	<delete id="deleteFaQBoard">
+	DELETE FROM FAQBOARD
+	WHERE FAQID = #{faqId}
+	</delete>
+	<select id="selectOne" resultMap="faqBoardResultMap">
+	SELECT * FROM FAQBOARD
+	WHERE FAQID=#{faqId}
+	</select>
+	<select id="getListCount" resultType="int">
+	SELECT COUNT(*) FROM FAQBOARD
+	</select>
+	<update id="updateFaQBoard" >
+	UPDATE FAQBOARD
+	SET FAQTITLE = #{faqTitle}, FAQCONTENT=#{faqContent},
+	WHERE FAQID=#{faqId}
+	</update>
+	<select id="selectList" resultMap="faqBoardResultMap">
+	SELECT * FROM FAQBOARD
+	ORDER BY FAQID DESC
+	</select>
+	
+</mapper>

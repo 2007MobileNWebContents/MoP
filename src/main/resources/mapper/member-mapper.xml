@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="MemberMapper">
+
+   <resultMap type="Member" id="memberResultMap">
+      <result property="memberId" column="MEMBERID" />
+      <result property="memberPwd" column="MEMBERPWD" />
+      <result property="memberName" column="MEMBERNAME" />
+      <result property="phone" column="PHONE" />
+      <result property="email" column="EMAIL" />
+      <result property="bank" column="BANK"/>
+      <result property="accountNumber" column="ACCOUNTNUMBER" />
+      <result property="addr" column="ADDR" />
+      <result property="won" column="WON" />
+      <result property="reservation" column="RESERVATION" />
+      <result property="joinDate" column="JOINDATE" />
+
+   </resultMap>
+
+
+   <select id="selectOne" resultMap="memberResultMap">
+      SELECT * FROM MEMBER
+      WHERE
+      MEMBERID=#{memberId} AND MEMBERPWD=#{memberPwd}
+   </select>
+   <insert id="insertMember">
+      INSERT INTO MEMBER
+      VALUES(#{memberId},#{memberPwd},#{memberName},#{phone},#{email},#{bank},#{accountNumber},#{addr},DEFAULT,DEFAULT,SYSDATE)
+   </insert>
+   <update id="updateMember">
+      UPDATE MEMBER
+      SET ADDR = #{addr}, MEMBERPWD = #{memberPwd}, PHONE = #{phone}, EMAIL = #{email}, ACCOUNTNUMBER = #{accountNumber}
+      WHERE MEMBERID = #{memberId}
+   </update>
+   <delete id="deleteMember">
+      DELETE FROM MEMBER
+      WHERE MEMBERID = #{memberId}
+   </delete>
+   <select id="checkIdDup" resultType="int">
+      SELECT COUNT(*) FROM MEMBER WHERE MEMBERID = #{memberId}
+   </select>
+   <update id="reservationMember">
+      UPDATE MEMBER
+      SET WON = WON + #{won}, RESERVATION= 'Y'
+      WHERE MEMBERID = #{memberId}
+   </update>
+</mapper>

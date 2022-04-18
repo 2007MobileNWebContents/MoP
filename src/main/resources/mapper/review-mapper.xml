@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="reviewMapper">
+
+	<resultMap type="Review" id="reviewResultMap">
+		<result property="vCreateDate" column="V_CREATE_DATE"></result>
+		<result property="vModifyDate" column="V_MODIFY_DATE"></result>
+		<result property="vStatus" column="V_STATUS"></result>
+	</resultMap>
+	<resultMap type="RvReply" id="rvReplyResultMap">
+		<result property="reId" column="RE_ID"></result>
+		<result property="reContent" column="RE_CONTENT"></result>
+		<result property="refBid" column="REF_BID"></result>
+		<result property="reWriter" column="RE_WRITER"></result>
+		<result property="reCreateDate" column="RE_CREATE_DATE"></result>
+	</resultMap>
+	
+	<select id="selectList" resultMap="reviewResultMap">
+		SELECT * FROM REVIEW
+		WHERE V_STATUS = 'Y' AND VNO=#{vNo}
+		ORDER BY VID DESC
+	</select>
+	
+	<select id="selectOne" resultMap="reviewResultMap">
+		SELECT * FROM REVIEW
+		WHERE VID = #{vId}
+	</select>
+	
+	<insert id="insertReview">
+		INSERT INTO REVIEW
+		VALUES(SEQ_VID.NEXTVAL, #{vWriter}, #{vContent}, #{filePath},
+		SYSDATE, SYSDATE, DEFAULT, #{vStar}, #{vNo})
+	</insert>
+	
+	<update id="deleteReview">
+		UPDATE REVIEW
+		SET V_STATUS = 'N'
+		WHERE VID = #{vId}
+	</update>
+	
+	<update id="updateReview">
+		UPDATE REVIEW
+		SET VCONTENT = #{vContent}, FILEPATH = #{filePath}, VSTAR = #{vStar}, V_CREATE_DATE = SYSDATE
+		WHERE VID = #{vId}
+	</update>
+	
+	<insert id="insertRvReply">
+		INSERT INTO REVIEW_REPLY
+		VALUES(SEQ_RE_ID.NEXTVAL, #{reContent}, #{refBid}, #{reWriter}, SYSDATE)
+	</insert>
+	
+	<select id="selectRvReplyList" resultMap="rvReplyResultMap">
+		SELECT * FROM REVIEW_REPLY
+		WHERE REF_BID = #{vId}
+		ORDER BY RE_ID DESC
+	</select>
+	
+	<select id="selectRvReply" resultMap="rvReplyResultMap">
+		SELECT * FROM REVIEW_REPLY
+		WHERE RE_ID = #{reId}
+	</select>
+	
+	<delete id="deleteRvReply">
+		DELETE FROM REVIEW_REPLY
+		WHERE RE_ID = #{reId}
+	</delete>
+	
+	<select id="selectBoxList" parameterType="java.util.Map" resultMap="reviewResultMap">
+		SELECT * FROM REVIEW
+		WHERE V_STATUS = 'Y' AND VNO = #{vNo}
+			<if test="select.selectCondition.toString() == 'new'">
+				ORDER BY V_CREATE_DATE DESC
+			</if>
+			<if test="select.selectCondition.toString() == 'starUp'">
+				ORDER BY VSTAR DESC, V_CREATE_DATE DESC
+			</if>
+			<if test="select.selectCondition.toString() == 'starDown'">
+				ORDER BY VSTAR ASC, V_CREATE_DATE DESC
+			</if>
+	</select>
+
+</mapper>

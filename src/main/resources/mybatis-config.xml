@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+		<!-- 만약 null로 데이터가 전달되었다면 빈칸이 아닌 "NULL"로
+		인식하도록 설정
+		* value 설정시 NULL은 반드시 대문자로 작성! -->
+	</settings>
+	<typeAliases>
+		<typeAlias type="com.kh.mop.scheduler.domain.Scheduler" alias="Scheduler"/>
+		<typeAlias type="com.kh.mop.schedulerGroup.domain.SchedulerGroup" alias="SchedulerGroup"/>
+		<typeAlias type="com.kh.mop.freeboard.domain.FreeBoard" alias="FreeBoard"/>
+		<typeAlias type="com.kh.mop.freeboard.domain.FreeBoardReply" alias="FreeBoardReply"/>
+		<typeAlias type="com.kh.mop.eventboard.domain.Eventboard" alias="EventBoard"/>
+		<typeAlias type="com.kh.mop.eventboard.domain.EventboardReply" alias="EventBoardReply"/>
+		<typeAlias type="com.kh.mop.place.domain.Place" alias="Place"/>
+		<typeAlias type="com.kh.mop.review.domain.Review" alias="Review"/>
+		<typeAlias type="com.kh.mop.member.domain.Member" alias="Member"/>
+		<typeAlias type="com.kh.mop.review.domain.RvReply" alias="RvReply"/>
+		<typeAlias alias="Reservation" type="com.kh.mop.reservation.domain.Reservation"/>
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="mapper/scheduler-mapper.xml"></mapper>
+		<mapper resource="mapper/schedulerGroup-mapper.xml"></mapper>
+		<mapper resource="mapper/freeboard-mapper.xml"></mapper>
+		<mapper resource="mapper/eventboard-mapper.xml"></mapper>
+		<mapper resource="mapper/place-mapper.xml"></mapper>
+		<mapper resource="mapper/review-mapper.xml"></mapper>
+		<mapper resource="mapper/member-mapper.xml"></mapper>
+		<mapper resource="mapper/reservation-mapper.xml"/>
+	</mappers>
+</configuration>

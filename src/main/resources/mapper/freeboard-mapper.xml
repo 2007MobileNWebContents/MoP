@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="FreeBoardMapper">
+
+	<resultMap type="FreeBoard" id="freeBoardResultMap">
+	<result property="fCreateDate" column="F_CREATE_DATE"/>
+	<result property="fModifyDate" column="F_MODIFY_DATE"/>
+	<result property="fStatus" column="F_STATUS"/>
+	<result property="fOriginalFileName" column="F_ORIGINAL_FILENAME"/>
+	<result property="fRenameFileName" column="F_RENAME_FILENAME"/>
+	</resultMap>
+	
+	<resultMap type="FreeBoardReply" id="freeBoardReplyResultMap">
+	<result property="refFBId" column="REF_FBID"/>
+	<result property="fbrWriter" column="FBRWRITER"/>
+	<result property="fbrContent" column="FBRCONTENT"/>
+	<result property="fbrCreateDate" column="FBR_CREATE_DATE"/>
+	<result property="fbrModifyDate" column="FBR_MODIFY_DATE"/>
+	<result property="fbrStatus" column="FBR_STATUS"/>
+	</resultMap>
+
+	<insert id="insertFreeBoard">
+		INSERT INTO FREEBOARD
+		VALUES(SEQ_FID.NEXTVAL, #{fTitle}, #{fContent}, #{fWriter},
+		SYSDATE, SYSDATE, DEFAULT, #{fOriginalFileName}, #{fRenameFileName},
+		#{fCount}, DEFAULT)
+	</insert>
+	
+	
+	<update id="deleteFreeBoard">
+	UPDATE FREEBOARD
+	SET F_STATUS = 'N'  	
+	WHERE FID = #{fId}
+	</update>
+	
+	<select id="selectList" resultMap="freeBoardResultMap">
+	SELECT * FROM FREEBOARD
+	WHERE F_STATUS = 'Y' 
+	ORDER BY FID DESC
+	</select>
+	
+	<select id="getListCount" resultType="int">
+	SELECT COUNT(*) FROM FREEBOARD
+	WHERE F_STATUS = 'Y'
+	</select>
+	
+	<select id="selectOne" resultMap="freeBoardResultMap">
+	SELECT * FROM FREEBOARD
+	WHERE FID = #{fId} AND F_STATUS = 'Y'
+	</select>
+	
+	<update id="updateCount">
+	UPDATE FREEBOARD
+	SET FCOUNT = FCOUNT+1
+	WHERE FID = #{fId}
+	</update>
+	
+	<update id="updateReplyCount">
+	UPDATE FREEBOARD
+	SET REPLYCOUNT = REPLYCOUNT+1
+	WHERE FID = #{fId}
+	</update>
+	
+	<update id="deleteReplyCount">
+	UPDATE FREEBOARD
+	SET REPLYCOUNT = REPLYCOUNT-1
+	WHERE FID = #{refFBId}
+	</update>
+	
+	<update id="updateFreeBoard">
+	UPDATE FREEBOARD
+	SET FTITLE = #{fTitle}, FCONTENT=#{fContent}, F_MODIFY_DATE=SYSDATE, 
+	F_ORIGINAL_FILENAME = #{fOriginalFileName}, F_RENAME_FILENAME=#{fRenameFileName}
+	WHERE FID=#{fId}
+	</update>
+	
+	<insert id="insertFBReply">
+	INSERT INTO FREEBOARDREPLY 
+	VALUES(SEQ_FBRID.NEXTVAL, #{refFBId}, #{fbrWriter}, #{fbrContent}, SYSDATE, SYSDATE, DEFAULT)
+	</insert>
+	
+	<select id="selectFBReplyList" resultMap="freeBoardReplyResultMap">
+	SELECT * FROM FREEBOARDREPLY
+	WHERE REF_FBID = #{refFBID} AND FBR_STATUS = 'Y'
+	ORDER BY FBRID DESC
+	</select>
+	
+	<update id="updateFBReply">
+	UPDATE FREEBOARDREPLY
+	SET FBRCONTENT =#{fbrContent}, FBR_MODIFY_DATE = SYSDATE
+	WHERE FBRID= #{fbrId}
+	</update>
+	
+	<update id="deleteFBReply">
+	UPDATE FREEBOARDREPLY
+	SET FBR_STATUS = 'N'
+	WHERE FBRID=#{fbrId}
+	</update>
+	
+	<select id="searchList" resultMap="freeBoardResultMap">
+	SELECT * FROM FREEBOARD
+	<if test="searchType.toString() == 'title'">
+	WHERE FTITLE LIKE '%' || #{searchValue} || '%' AND F_STATUS = 'Y'
+	</if>
+	<if test="searchType.toString() == 'fWriter'">
+	WHERE FWRITER LIKE '%' || #{searchValue} || '%' AND F_STATUS = 'Y'
+	</if>
+	<if test="searchType.toString() == 'content'">
+	WHERE FCONTENT LIKE '%' || #{searchValue} || '%' AND F_STATUS = 'Y'
+	</if>
+	<if test="searchType.toString() == 'all'">
+	WHERE FTITLE LIKE '%' || #{searchValue} || '%' AND F_STATUS = 'Y'
+	OR FWRITER LIKE '%' || #{searchValue} || '%' AND F_STATUS = 'Y'
+	OR FCONTENT LIKE '%' || #{searchValue} || '%' AND F_STATUS = 'Y'
+	</if>
+	ORDER BY F_CREATE_DATE DESC
+	</select>
+	
+	
+	
+</mapper>

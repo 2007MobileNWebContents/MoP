@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace = "SchedulerMapper">
+  
+  <resultMap type="Scheduler" id="schedulerResultMap">
+  <result property="sId" column="SID"/>
+	<result property="start" column="STARTDATE"/>
+	<result property="end" column="ENDDATE"/>
+	
+	</resultMap>
+  
+  <insert id="insertScheduler">
+  	INSERT INTO SCHEDULER
+  VALUES(SEQ_SID.NEXTVAL,#{title},#{description},#{start},#{end},#{type},#{username},#{backgroundColor},#{textColor},#{allDay})
+  </insert>
+  
+  <select id="selectListScheduler" resultMap="schedulerResultMap">
+	SELECT * FROM SCHEDULER
+	ORDER BY STARTDATE ASC
+  </select> 
+  
+  <delete id="deleteScheduler" >
+  	DELETE FROM SCHEDULER
+  	WHERE SID = #{sId}
+  	
+  </delete>
+  <update id="updateScheduler">
+  	UPDATE SCHEDULER 
+  	SET TITLE = #{title}, DESCRIPTION = #{description}, STARTDATE = #{start}, ENDDATE = #{end}, TYPE = #{type}, BACKGROUNDCOLOR = #{backgroundColor}
+  	WHERE SID = #{sId}
+  
+  </update>
+</mapper>
